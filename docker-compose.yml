@@ -26,14 +26,11 @@ services:
     volumes:
       - ./frontend/:/app/result_build/
   nginx:
-    image: nginx:1.19.3
+    build: ./
+    env_file: .env
     ports:
       - "8800:80"
     volumes:
-      - ./infra/nginx.conf
-      - ./frontend/build:/usr/share/nginx/html/
-      - ./docs/:/usr/share/nginx/html/api/docs/
       - static:/var/html/static/
       - media:/var/html/media/
-    depends_on:
-      - backend
+    container_name: foodgram_nginx
