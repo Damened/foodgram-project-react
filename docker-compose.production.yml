@@ -25,11 +25,11 @@ services:
     volumes:
       - ./frontend/:/app/result_build/
   nginx:
-    image: nginx:1.19.3
+    image: damened/foodgram_gateway
+    env_file: .env
     ports:
       - "8800:80"
     volumes:
-      - /home/yc-user/foodgram/nginx.conf
       - ./frontend/build:/usr/share/nginx/html/
       - ./docs/redoc.html:/usr/share/nginx/html/api/docs/
       - static:/var/html/static/
