@@ -15,24 +15,26 @@ services:
   backend:
     image: damened/foodgram_backend
     env_file: .env
-    volumes:
-      - static:/app/static/
-      - media:/app/media/
     depends_on:
       - db6
+    volumes:
+      - static:/backend_static/
+      - media:/app/foodgram/media/
+  
   frontend:
     image: damened/foodgram_frontend
+    env_file: .env
+    command: cp -r /app/build/. /frontend_static/
     volumes:
-      - ./frontend/:/app/result_build/
+      - static:/frontend_static
+  
   nginx:
     image: damened/foodgram_gateway
     env_file: .env
+    depends_on:
+      - backend
     ports:
       - "8800:80"
     volumes:
-      - static:/var/html/static/
-      - media:/var/html/media/
-    depends_on:
-      - backend
-    container_name: foodgram_gateway
-
+      - static:/static/
+      - media:/media/
