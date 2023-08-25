@@ -114,7 +114,7 @@ jobs:
           sudo docker image rm $(sudo docker image ls -f "dangling=true" -q)
           sudo docker compose -f docker-compose.production.yml up -d
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
-          sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
+          sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic --no-input
           sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /app/static/
           sudo docker compose -f docker-compose.production.yml exec backend python -Xutf8 manage.py python manage.py load_data
   send_message:
