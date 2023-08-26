@@ -20,14 +20,14 @@ services:
     volumes:
       - static:/backend_static/
       - media:/app/foodgram/media/
-  
+
   frontend:
     image: damened/foodgram_frontend
     env_file: .env
     command: cp -r /app/build/. /frontend_static/
     volumes:
       - static:/frontend_static
-  
+
   nginx:
     image: nginx:1.19.3
     env_file: .env
