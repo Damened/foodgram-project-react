@@ -29,7 +29,6 @@ services:
       - static:/frontend_static
 
   nginx:
-  nginx:
     image: nginx:1.19.3
     ports:
       - "8800:80"
