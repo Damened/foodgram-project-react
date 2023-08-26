@@ -28,7 +28,7 @@ services:
     volumes:
       - static:/frontend_static
   
-  nginx:
+  gateway:
     image: damened/foodgram_gateway
     env_file: .env
     depends_on:
