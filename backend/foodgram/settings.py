@@ -7,7 +7,8 @@ SECRET_KEY = '6+*)i_7i&raxzp@v7=5-8eiax^nl&6%h*&4)k)&5ne2vh5zrqu'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'damenedfinal.ddns.net', '158.160.65.235']
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS', default='localhost').split(', ')
 
 INSTALLED_APPS = [
     'api.apps.ApiConfig',
