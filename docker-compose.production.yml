@@ -36,7 +36,7 @@ services:
     ports:
       - "8800:80"
     volumes:
-      - static:/static/
+      - static:/staticfiles/
       - media:/static/media/
     depends_on:
       - backend
