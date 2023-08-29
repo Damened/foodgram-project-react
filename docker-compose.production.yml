@@ -18,8 +18,8 @@ services:
     depends_on:
       - db6
     volumes:
-      - static:/backend_static/
-      - media:/app/foodgram/media/
+      - static:/app/static/
+      - media:/app/media/
 
   frontend:
     image: damened/foodgram_frontend
