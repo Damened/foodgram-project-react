@@ -29,7 +29,7 @@ services:
       - static:/frontend_static
 
   nginx:
-    image: damened/foodgram_geteway
+    image: damened/foodgram_nginx
     env_file: .env
     ports:
       - "8800:80"
