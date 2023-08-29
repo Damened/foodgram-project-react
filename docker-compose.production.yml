@@ -28,7 +28,7 @@ services:
       - backend
     command: cp -r /app/build/. /frontend_static/
     volumes:
-      - static:/static/
+      - static:/frontend_static
 
   nginx:
     image: damened/foodgram_nginx
