@@ -28,16 +28,15 @@ services:
     volumes:
       - static:/frontend_static
 
-  nginx:
-    image: damened/kittygram_gateway
-    env_file: .env
-    depends_on:
-      - backend
+  gateway:
+    image: nginx:1.19.3
     ports:
-      - 8800:80
+      - "8800:80"
     volumes:
       - /home/yc-user/foodgram/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./frontend/build:/usr/share/nginx/html/
       - ./docs/redoc.html:/usr/share/nginx/html/api/docs/
       - static:/var/html/static/
       - media:/var/html/media/
+    depends_on:
+      - backend
