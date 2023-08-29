@@ -29,7 +29,7 @@ services:
       - static:/frontend_static
 
   gateway:
-    image: damened/kittygram_gateway
+    image: damened/foodgram_gateway
     env_file: .env
     ports:
       - "8800:80"
