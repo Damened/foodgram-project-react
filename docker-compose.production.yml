@@ -32,7 +32,7 @@ services:
     image: damened/foodgram_nginx
     env_file: .env
     ports:
-      - "8800:90"
+      - "8800:80"
     volumes:
       - static:/var/html/static/
       - media:/var/html/media/
