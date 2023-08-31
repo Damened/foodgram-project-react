@@ -17,17 +17,20 @@ services:
     env_file: .env
     depends_on:
       - db6
+    env_file: .env
     volumes:
-      - static:/code/static_backend/
-      - media:/code/media/
+      - static:/backend_static
+      - media:/app/media
+    
 
   frontend:
     image: damened/foodgram_frontend
     env_file: .env
     depends_on:
       - backend
+    command: cp -r /app/build/. /frontend_static/
     volumes:
-      - ../frontend/:/app/result_build/
+      - static:/frontend_static
 
   nginx:
     image: damened/foodgram_nginx
@@ -35,11 +38,7 @@ services:
     ports:
       - "8800:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ../frontend/build:/usr/share/nginx/html/
-      - /docs/:/usr/share/nginx/html/api/docs/
-      - static:/var/html/static_backend/
-      - media:/var/html/media/
-    restart: always
+      - static:/staticfiles
+      - media:/media
     depends_on:
-      - frontend
+      - backend
