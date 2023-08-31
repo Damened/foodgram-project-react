@@ -18,7 +18,7 @@ services:
     depends_on:
       - db6
     volumes:
-      - static:/backend_static/
+      - static:/static/
       - media:/app/media/
 
   frontend:
@@ -38,5 +38,6 @@ services:
     volumes:
       - static:/staticfiles/
       - media:/static/media/
-    depends_on:
+   depends_on:
       - backend
+      - frontend
