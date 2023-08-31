@@ -126,7 +126,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 6,
 }
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static_backend/'
 STATIC_ROOT = BASE_DIR / 'collected_static'
 
 MEDIA_URL = '/media/'
