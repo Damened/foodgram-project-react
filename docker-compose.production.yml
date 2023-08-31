@@ -18,7 +18,7 @@ services:
     depends_on:
       - db6
     volumes:
-      - static:/static/
+      - static:/backend_static/
       - media:/app/media/
 
   frontend:
@@ -26,9 +26,9 @@ services:
     env_file: .env
     depends_on:
       - backend
-    command: cp -r /app/build/. /static/
+    command: cp -r /app/build/. /frontend_static/
     volumes:
-      - static:/static/
+      - static:/frontend_static/
 
   nginx:
     image: damened/foodgram_nginx
@@ -38,6 +38,5 @@ services:
     volumes:
       - static:/staticfiles/
       - media:/static/media/
-   depends_on:
+    depends_on:
       - backend
-      - frontend
