@@ -17,7 +17,6 @@ services:
     env_file: .env
     depends_on:
       - db6
-    env_file: .env
     volumes:
       - static:/backend_static
       - media:/app/media
