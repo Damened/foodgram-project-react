@@ -26,8 +26,9 @@ services:
     env_file: .env
     depends_on:
       - backend
+    command: cp -r /app/build/. /static/
     volumes:
-      - ../frontend/:/app/result_build/
+      - static:/static/
 
   nginx:
     image: damened/foodgram_nginx
@@ -35,7 +36,7 @@ services:
     ports:
       - "8800:80"
     volumes:
-      - static:/var/html/static/
-      - media:/var/html/media/
+      - static:/static/
+      - media:/static/media/
     depends_on:
       - backend
