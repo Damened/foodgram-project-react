@@ -36,7 +36,7 @@
 
 - :docker compose exec backend python manage.py collectstatic
 
-- :docker compose exec backend cp -r /app/collected_static/. /app/static/
+- :docker compose exec backend cp -r /app/collected_static/. /backend_static/static/
 
 ## Создайте суперюзера и загрузите предустановленый список ингредиентов
 - :docker compose exec backend python manage.py createsuperuser
