@@ -43,9 +43,9 @@
 
 - :docker compose exec backend python manage.py load_data
 ## Проверить работу
-- http://localhost:8000/
+- http://127.0.0.1:8800/
 ## Документация
-- http://localhost:8000/api/docs/
+- http://127.0.0.1:8800/api/docs/
 
 ## для проверки 
 ### admin: http://damenedfinal.ddns.net/admin
