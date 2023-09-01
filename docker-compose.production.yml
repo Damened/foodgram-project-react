@@ -29,7 +29,7 @@ services:
   nginx:
     image: damened/foodgram_nginx
     ports:
-      - 8000:80
+      - 8800:80
     volumes:
       - static:/static/
       - media:/media/
