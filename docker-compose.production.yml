@@ -6,7 +6,7 @@ volumes:
   media:
 
 services:
-  db6:
+  db7:
     image: postgres:13
     env_file: .env
     volumes:
@@ -16,7 +16,7 @@ services:
     image: damened/foodgram_backend
     env_file: .env
     depends_on:
-      - db6
+      - db7
     volumes:
       - static:/backend_static/
       - media:/app/media/
