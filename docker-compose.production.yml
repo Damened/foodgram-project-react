@@ -20,12 +20,14 @@ services:
     volumes:
       - static:/backend_static/
       - media:/app/media/
+  
   frontend:
     image: damened/foodgram_frontend
     command: 
     volumes:
       - static:/frontend_static/
     env_file: .env
+  
   nginx:
     image: damened/foodgram_nginx
     ports:
