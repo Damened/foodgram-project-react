@@ -55,3 +55,5 @@
 ## test user простой пользователь для проверки подписки и скачивание 
 - email: test1@mail.ru
 - password: 12345678Qw
+- email: test2@mail.ru
+- password: 12345678Qw
