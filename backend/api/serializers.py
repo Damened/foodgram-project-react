@@ -1,12 +1,9 @@
-from django.shortcuts import get_object_or_404
-
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework.serializers import (CharField, EmailField, Field,
                                         IntegerField, ModelSerializer,
                                         PrimaryKeyRelatedField, ReadOnlyField,
                                         SerializerMethodField, ValidationError)
-from foodgram.settings import MIN_VALUE, MAX_VALUE
 from recipes.models import (Ingredient, IngredientsAmount, Recipe, Tag)
 from users.models import User
 
@@ -52,7 +49,7 @@ class TagSerializer(ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = "__all__"
+        fields = ('id', 'name', 'color', 'slug')
 
 
 class IngredientSerializer(ModelSerializer):
@@ -60,28 +57,19 @@ class IngredientSerializer(ModelSerializer):
 
     class Meta:
         model = Ingredient
-        fields = "__all__"
+        fields = ('id', 'name', 'measurement_unit')
 
 
 class IngredientCreateSerializer(ModelSerializer):
     """Сериализатор для добавления ингредиентов при создании рецепта"""
 
-    id = IntegerField()
+    id = PrimaryKeyRelatedField(
+        queryset=Ingredient.objects.all()
+    )
 
     class Meta:
         model = IngredientsAmount
         fields = ("id", "amount",)
-
-    def validate_amount(self, amount):
-        if amount <= MIN_VALUE:
-            raise ValidationError(
-                'Количество ингредиента должно быть больше 0'
-            )
-        if amount > MAX_VALUE:
-            raise ValidationError(
-                'Количество ингредиента не должно превышать 32000'
-            )
-        return amount
 
 
 class ReadIngredientsInRecipeSerializer(ModelSerializer):
@@ -166,18 +154,37 @@ class RecipeCreateSerializer(ModelSerializer):
             "author",
         )
 
-    def create_ingredients_amounts(self, recipe, ingredients):
-        ingredients_amounts = []
-        for ingredient in ingredients:
-            current_ingredient = get_object_or_404(
-                Ingredient, id=ingredient.get("id")
+    def validate(self, obj):
+        for field in ['name', 'text', 'cooking_time']:
+            if not obj.get(field):
+                raise ValidationError(
+                    f'{field} - Обязательное поле.'
+                )
+        if not obj.get('tags'):
+            raise ValidationError(
+                'Нужно указать минимум 1 тег.'
             )
-            ingredients_amounts.append(IngredientsAmount(
-                ingredient=current_ingredient,
-                recipe=recipe,
-                amount=ingredient.get("amount")
-            ))
-        IngredientsAmount.objects.bulk_create(ingredients_amounts)
+        if not obj.get('ingredients'):
+            raise ValidationError(
+                'Нужно указать минимум 1 ингредиент.'
+            )
+        inrgedient_id_list = [item['id'] for item in obj.get('ingredients')]
+        unique_ingredient_id_list = set(inrgedient_id_list)
+        if len(inrgedient_id_list) != len(unique_ingredient_id_list):
+            raise ValidationError(
+                'Ингредиенты должны быть уникальны.'
+            )
+        return obj
+
+    def create_ingredients_amounts(self, instance, ingredients):
+        for ingredient in ingredients:
+            IngredientsAmount.objects.update_or_create(
+                recipe=instance,
+                ingredient=ingredient.get('id'),
+                amount=ingredient.get('amount')
+            )
+        instance.save()
+        return instance
 
     def create(self, validated_data):
         ingredients = validated_data.pop("ingredients")
@@ -200,17 +207,6 @@ class RecipeCreateSerializer(ModelSerializer):
             recipe, context={"request": self.context.get("request")}
         ).data
         return data
-
-    def validate_cooking_time(self, cooking_time):
-        if cooking_time <= MIN_VALUE:
-            raise ValidationError(
-                'Время приготовления должно быть больше 0'
-            )
-        if cooking_time > MAX_VALUE:
-            raise ValidationError(
-                'Время приготовления должно быть не больше 32000'
-            )
-        return cooking_time
 
 
 class RecipeFollowerSerializer(ModelSerializer):

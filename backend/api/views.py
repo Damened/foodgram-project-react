@@ -143,21 +143,32 @@ class RecipeViewSet(viewsets.ModelViewSet):
             status=status.HTTP_204_NO_CONTENT,
         )
 
-    @action(detail=False, methods=["get"],
-            permission_classes=[IsAuthenticated])
-    def download_shopping_cart(self, request):
-        user = request.user
-        ingredients = (
-            IngredientsAmount.objects.filter(recipe__shopping_cart__user=user)
-            .values("ingredient__name", "ingredient__measurement_unit")
-            .annotate(amount=Sum("amount"))
+    def create_ingredients_file(self):
+        """Метод для создания текстового файла списка покупок."""
+        user = self.request.user
+        ingredients = IngredientsAmount.objects.filter(
+            recipe__shopping_cart__user=user
+        ).order_by('ingredient__name').values(
+            "ingredient__name", "ingredient__measurement_unit"
+        ).annotate(amount=Sum("amount"))
+        shopping_cart = []
+        for ingredient in ingredients:
+            shopping_cart.append(
+                f'{ingredient["ingredient__name"]}'
+                f'{ingredient["amount"]} '
+                f'{ingredient["ingredient__measurement_unit"]}\n'
+            )
+        return shopping_cart
+
+    @action(
+        detail=False,
+        permission_classes=(IsAuthenticated,),
+        url_path=r"download_shopping_cart"
+    )
+    def download_shopping_cart(self, request, *args, **kwargs):
+        content = self.create_ingredients_file()
+        response = HttpResponse(content, content_type="text/plain")
+        response["Content-Disposition"] = (
+            'attachment; filename="ingredients.txt"'
         )
-        data_list = ingredients.values_list(
-            "ingredient__name", "ingredient__measurement_unit", "amount"
-        )
-        shopping_cart = "\n".join(
-            [f"{name} {amount} {measure}"
-             for name, measure, amount in data_list]
-        )
-        response = HttpResponse(shopping_cart, content_type="text/plain")
         return response

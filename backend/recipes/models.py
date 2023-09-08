@@ -1,6 +1,7 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from foodgram.settings import MIN_VALUE, MAX_VALUE
+from api.validators import hex_color_validator
 from users.models import User
 
 
@@ -16,6 +17,7 @@ class Tag(models.Model):
         verbose_name="Цвет - HEX",
         max_length=7,
         null=True,
+        validators=[hex_color_validator],
     )
     slug = models.CharField(
         verbose_name="Slug",
@@ -161,14 +163,6 @@ class Favorite(models.Model):
         related_name="favorite",
     )
 
-    @classmethod
-    def create(cls, user, recipe):
-        item = cls(user=user, recipe=recipe)
-        recipe.is_fovorited = True
-        recipe.save()
-        item.save
-        return item
-
 
 class ShoppingCart(models.Model):
     """Модель списка избранного"""
@@ -185,11 +179,3 @@ class ShoppingCart(models.Model):
         verbose_name="Рецепт",
         related_name="shopping_cart",
     )
-
-    @classmethod
-    def create(cls, user, recipe):
-        item = cls(user=user, recipe=recipe)
-        recipe.is_in_shopping_cart = True
-        recipe.save()
-        item.save
-        return item
