@@ -47,6 +47,9 @@
 ## Документация
 - http://127.0.0.1:8800/api/docs/
 
+## сайт доступен по адресу 
+### http://damenedfinal.ddns.net
+
 ## для проверки 
 ### admin: http://damenedfinal.ddns.net/admin
 - email: admin@mail.ru
