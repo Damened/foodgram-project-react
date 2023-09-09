@@ -8,7 +8,7 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django_secret_key')
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'damenedfinal.ddns.net']
 
@@ -111,6 +111,8 @@ USE_TZ = True
 
 MIN_VALUE = 0
 MAX_VALUE = 32000
+
+CSRF_TRUSTED_ORIGINS = ['damenedfinal.ddns.net']
 
 AUTH_USER_MODEL = 'users.User'
 
